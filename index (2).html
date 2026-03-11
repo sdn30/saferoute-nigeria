@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeRoute Nigeria — National Travel Security Command Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Exo+2:ital,wght@0,100..900;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #010810;
+  --deep: #030f1c;
+  --base: #051424;
+  --raised: #071a2e;
+  --lift: #0a2038;
+  --edge: #0d2845;
+  --rim: #163356;
+  --glow-rim: rgba(0,180,255,0.15);
+
+  --jade: #00e5a0;
+  --jade-dim: rgba(0,229,160,0.12);
+  --jade-glow: rgba(0,229,160,0.35);
+
+  --ice: #00c8ff;
+  --ice-dim: rgba(0,200,255,0.1);
+  --ice-glow: rgba(0,200,255,0.3);
+
+  --solar: #ffcc00;
+  --solar-dim: rgba(255,204,0,0.1);
+  --solar-glow: rgba(255,204,0,0.3);
+
+  --crimson: #ff2d55;
+  --crimson-dim: rgba(255,45,85,0.1);
+  --crimson-glow: rgba(255,45,85,0.3);
+
+  --naija-green: #008751;
+  --naija-white: #e8f4ff;
+
+  --text-bright: #dff0ff;
+  --text-mid: #6a9cbf;
+  --text-dim: #2d5070;
+  --text-ghost: #1a3048;
+
+  --font-display: 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Exo 2', sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width:100%; height:100%;
+  background: var(--void);
+  color: var(--text-bright);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+/* ═══ GRID TEXTURE ═══ */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(0,180,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,255,0.03) 1px, transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none; z-index:0;
+}
+
+/* ═══ SCANLINES ═══ */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  pointer-events:none; z-index:9999;
+}
+
+/* ════════════════════════════════
+   HEADER
+════════════════════════════════ */
+#header {
+  position:relative; z-index:100;
+  height:56px;
+  background: linear-gradient(180deg, #030f1c 0%, #020b17 100%);
+  border-bottom: 1px solid var(--rim);
+  display:flex; align-items:center;
+  padding:0 20px;
+  gap:20px;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.6), 0 1px 0 var(--glow-rim);
+}
+
+.h-brand {
+  display:flex; align-items:center; gap:12px;
+  text-decoration:none;
+}
+.h-emblem {
+  width:38px; height:38px;
+  background: linear-gradient(135deg, var(--naija-green), var(--jade));
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow: 0 0 20px var(--jade-glow), inset 0 1px 0 rgba(255,255,255,0.15);
+  flex-shrink:0;
+}
+.h-brand-text { line-height:1.1; }
+.h-name {
+  font-family: var(--font-display);
+  font-size:20px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase;
+  background: linear-gradient(90deg, var(--jade), var(--ice));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.h-tagline {
+  font-family: var(--font-mono);
+  font-size:8px; letter-spacing:2px;
+  color: var(--text-mid); text-transform:uppercase;
+}
+
+.h-divider { width:1px; height:30px; background:var(--edge); }
+
+.h-live-pill {
+  display:flex; align-items:center; gap:7px;
+  background: rgba(0,229,160,0.06);
+  border:1px solid rgba(0,229,160,0.25);
+  border-radius:20px;
+  padding:5px 14px;
+  font-family:var(--font-mono);
+  font-size:10px; letter-spacing:2px;
+  color:var(--jade);
+}
+.pulse-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--jade);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow:0 0 0 0 var(--jade-glow); }
+  50% { box-shadow:0 0 0 7px rgba(0,229,160,0); }
+}
+
+.h-clock {
+  font-family:var(--font-mono);
+  text-align:center;
+}
+.h-time { font-size:18px; font-weight:500; color:var(--ice); letter-spacing:3px; line-height:1; }
+.h-date { font-size:9px; color:var(--text-mid); letter-spacing:2px; margin-top:2px; }
+
+.h-spacer { flex:1; }
+
+.h-kpi {
+  display:flex; gap:2px;
+}
+.kpi-box {
+  padding:4px 14px;
+  background: var(--raised);
+  border:1px solid var(--edge);
+  border-radius:6px;
+  text-align:center;
+  cursor:pointer;
+  transition: all 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.kpi-box::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: var(--kpi-accent, var(--ice));
+  transform:scaleX(0); transition:transform 0.3s;
+}
+.kpi-box:hover { background:var(--lift); border-color:var(--rim); }
+.kpi-box:hover::after { transform:scaleX(1); }
+.kpi-val {
+  font-family:var(--font-display);
+  font-size:17px; font-weight:700; line-height:1;
+  color:var(--kpi-accent, var(--ice));
+  text-shadow:0 0 12px var(--kpi-accent, var(--ice-glow));
+}
+.kpi-lbl { font-size:8px; color:var(--text-dim); letter-spacing:1.5px; text-transform:uppercase; margin-top:1px; }
+
+.h-alerts-btn {
+  position:relative;
+  width:36px; height:36px;
+  background:var(--raised);
+  border:1px solid var(--edge);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:16px;
+  transition:all 0.2s;
+}
+.h-alerts-btn:hover { background:var(--crimson-dim); border-color:rgba(255,45,85,0.4); }
+.alert-pip {
+  position:absolute; top:-3px; right:-3px;
+  background:var(--crimson);
+  color:#fff; font-size:8px; font-weight:700;
+  width:15px; height:15px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  animation: pip-pulse 1s ease infinite;
+}
+@keyframes pip-pulse {
+  50% { transform:scale(1.2); }
+}
+
+.h-user {
+  display:flex; align-items:center; gap:8px;
+  padding:6px 12px;
+  background:var(--raised);
+  border:1px solid var(--edge);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.h-user:hover { background:var(--lift); }
+.h-avatar {
+  width:26px; height:26px; border-radius:6px;
+  background: linear-gradient(135deg, var(--ice), #0044cc);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:#fff;
+}
+.h-user-name { font-size:11px; font-weight:600; line-height:1; }
+.h-user-role { font-size:9px; color:var(--text-mid); }
+
+/* ════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════ */
+#app {
+  position:relative; z-index:1;
+  display:grid;
+  grid-template-columns: 240px 1fr 280px;
+  grid-template-rows: 1fr 148px;
+  height: calc(100vh - 56px);
+}
+
+/* ════════════════════════════════
+   LEFT PANEL
+════════════════════════════════ */
+#left-panel {
+  background:var(--deep);
+  border-right:1px solid var(--edge);
+  overflow-y:auto;
+  scrollbar-width:none;
+  display:flex; flex-direction:column;
+}
+#left-panel::-webkit-scrollbar { display:none; }
+
+.panel-section {
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--edge);
+}
+.section-hdr {
+  font-family:var(--font-mono);
+  font-size:8px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-hdr::after { content:''; flex:1; height:1px; background:var(--edge); }
+
+/* NAV */
+.nav-link {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px;
+  border-radius:7px; margin-bottom:2px;
+  cursor:pointer; font-size:13px; font-weight:500;
+  color:var(--text-mid);
+  border:1px solid transparent;
+  transition:all 0.18s;
+  user-select:none;
+}
+.nav-link:hover { background:var(--raised); color:var(--text-bright); border-color:var(--edge); }
+.nav-link.active {
+  background:var(--ice-dim);
+  color:var(--ice);
+  border-color:rgba(0,200,255,0.2);
+}
+.nav-icon { width:18px; text-align:center; font-size:14px; flex-shrink:0; }
+.nav-count {
+  margin-left:auto;
+  font-size:9px; font-family:var(--font-mono);
+  padding:2px 7px; border-radius:10px;
+  background:var(--crimson); color:#fff; font-weight:700;
+}
+.nav-count.ok { background:rgba(0,229,160,0.15); color:var(--jade); }
+
+/* PARTNERS */
+.partner-row {
+  display:flex; align-items:center; gap:9px;
+  padding:9px 8px;
+  border-bottom:1px solid var(--edge);
+  cursor:pointer; transition:background 0.15s;
+}
+.partner-row:last-child { border-bottom:none; }
+.partner-row:hover { background:var(--raised); }
+.p-logo {
+  font-family:var(--font-display); font-size:11px; font-weight:700;
+  color:var(--ice); min-width:50px;
+  background:var(--lift);
+  border:1px solid var(--rim);
+  border-radius:5px; padding:3px 6px; text-align:center;
+}
+.p-info { flex:1; }
+.p-route { font-size:11px; font-weight:600; }
+.p-count { font-size:10px; color:var(--text-mid); }
+.status-chip {
+  font-family:var(--font-mono); font-size:8px; letter-spacing:1px;
+  padding:3px 8px; border-radius:10px;
+}
+.status-chip.ok { background:rgba(0,229,160,0.1); color:var(--jade); border:1px solid rgba(0,229,160,0.25); }
+.status-chip.sos { background:rgba(255,45,85,0.12); color:var(--crimson); border:1px solid rgba(255,45,85,0.3); animation:blink 0.9s infinite; }
+.status-chip.dev { background:rgba(255,204,0,0.1); color:var(--solar); border:1px solid rgba(255,204,0,0.25); }
+@keyframes blink { 50% { opacity:0.4; } }
+
+/* SYSTEM STATUS */
+.sys-row {
+  display:flex; align-items:center; gap:9px;
+  padding:7px 0;
+  border-bottom:1px solid var(--edge);
+  font-size:12px;
+}
+.sys-row:last-child { border-bottom:none; }
+.sys-led { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.sys-led.on { background:var(--jade); box-shadow:0 0 7px var(--jade-glow); }
+.sys-led.warn { background:var(--solar); box-shadow:0 0 7px var(--solar-glow); }
+.sys-led.off { background:var(--crimson); box-shadow:0 0 7px var(--crimson-glow); animation:blink 1s infinite; }
+.sys-name { flex:1; color:var(--text-bright); font-size:11px; }
+.sys-val { font-family:var(--font-mono); font-size:9px; color:var(--text-mid); }
+
+/* CORRIDORS */
+.corridor-card {
+  padding:9px 10px; border-radius:7px;
+  margin-bottom:6px; cursor:pointer;
+  border:1px solid var(--edge);
+  transition:all 0.2s;
+}
+.corridor-card:hover { border-color:var(--rim); }
+.corridor-card.high { border-left:3px solid var(--crimson); background:rgba(255,45,85,0.04); }
+.corridor-card.med { border-left:3px solid var(--solar); background:rgba(255,204,0,0.03); }
+.corridor-card.low { border-left:3px solid var(--jade); background:rgba(0,229,160,0.03); }
+.corridor-name { font-size:12px; font-weight:600; margin-bottom:3px; }
+.corridor-name.high { color:var(--crimson); }
+.corridor-name.med { color:var(--solar); }
+.corridor-name.low { color:var(--jade); }
+.corridor-meta { font-size:10px; color:var(--text-mid); }
+
+/* ════════════════════════════════
+   MAP AREA
+════════════════════════════════ */
+#map-area {
+  background:var(--base);
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+
+#map-toolbar {
+  display:flex; align-items:center; gap:6px;
+  padding:8px 14px;
+  background:var(--deep);
+  border-bottom:1px solid var(--edge);
+  flex-shrink:0;
+  z-index:20;
+}
+
+.tb-btn {
+  padding:5px 13px;
+  border-radius:6px;
+  border:1px solid var(--edge);
+  background:var(--raised);
+  color:var(--text-mid);
+  font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:all 0.18s;
+}
+.tb-btn:hover { border-color:var(--rim); color:var(--text-bright); background:var(--lift); }
+.tb-btn.active { background:var(--ice-dim); color:var(--ice); border-color:rgba(0,200,255,0.35); }
+.tb-btn.danger { background:rgba(255,45,85,0.08); color:var(--crimson); border-color:rgba(255,45,85,0.3); }
+.tb-btn.danger:hover { background:rgba(255,45,85,0.15); }
+.tb-sep { width:1px; height:18px; background:var(--edge); margin:0 4px; }
+.tb-coords {
+  margin-left:auto;
+  font-family:var(--font-mono); font-size:9px;
+  color:var(--text-mid); letter-spacing:1px;
+}
+
+#map-viewport {
+  flex:1; position:relative; overflow:hidden;
+  cursor:crosshair;
+}
+
+/* Nigeria SVG map */
+#nigeria-svg {
+  position:absolute; inset:0; width:100%; height:100%;
+}
+
+/* Route lines canvas */
+#route-canvas {
+  position:absolute; inset:0; width:100%; height:100%;
+  pointer-events:none;
+}
+
+/* Threat zones */
+.tz {
+  position:absolute; border-radius:50%;
+  border:2px dashed;
+  animation:tz-breathe 3s ease-in-out infinite;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+.tz.high { border-color:rgba(255,45,85,0.45); background:rgba(255,45,85,0.05); }
+.tz.med { border-color:rgba(255,204,0,0.35); background:rgba(255,204,0,0.04); }
+@keyframes tz-breathe {
+  0%,100% { transform:translate(-50%,-50%) scale(1); opacity:0.7; }
+  50% { transform:translate(-50%,-50%) scale(1.06); opacity:1; }
+}
+
+/* Bus markers */
+.bus-dot {
+  position:absolute;
+  width:12px; height:12px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  cursor:pointer; z-index:10;
+  transition:transform 0.2s;
+}
+.bus-dot:hover { transform:translate(-50%,-50%) scale(2); z-index:30; }
+.bus-dot::after {
+  content:'';
+  position:absolute; inset:-3px;
+  border-radius:50%;
+  border:1px solid;
+  opacity:0.5;
+}
+.bus-dot.ok { background:var(--jade); box-shadow:0 0 10px var(--jade-glow); animation:glow-ok 2s ease infinite; }
+.bus-dot.ok::after { border-color:var(--jade); }
+.bus-dot.sos { background:var(--crimson); box-shadow:0 0 14px var(--crimson-glow); animation:glow-sos 0.7s ease infinite; }
+.bus-dot.sos::after { border-color:var(--crimson); }
+.bus-dot.dev { background:var(--solar); box-shadow:0 0 10px var(--solar-glow); animation:glow-warn 1.5s ease infinite; }
+.bus-dot.dev::after { border-color:var(--solar); }
+@keyframes glow-ok { 50% { box-shadow:0 0 18px var(--jade-glow), 0 0 30px rgba(0,229,160,0.2); } }
+@keyframes glow-sos { 50% { box-shadow:0 0 22px var(--crimson-glow), 0 0 40px rgba(255,45,85,0.3); } }
+@keyframes glow-warn { 50% { box-shadow:0 0 18px var(--solar-glow); } }
+
+/* Bus tooltip */
+.bus-tip {
+  position:absolute; pointer-events:none;
+  bottom:calc(100% + 10px); left:50%;
+  transform:translateX(-50%);
+  background:rgba(3,15,28,0.97);
+  border:1px solid var(--ice);
+  border-radius:8px; padding:8px 12px;
+  white-space:nowrap; font-size:11px;
+  box-shadow:0 0 20px var(--ice-glow);
+  z-index:50; display:none;
+}
+.bus-dot:hover .bus-tip { display:block; }
+.tip-id { font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--ice); margin-bottom:3px; }
+.tip-row { display:flex; gap:8px; font-size:10px; color:var(--text-mid); }
+.tip-val { color:var(--text-bright); }
+
+/* Camera markers */
+.cam-marker {
+  position:absolute;
+  transform:translate(-50%,-50%);
+  width:16px; height:16px;
+  cursor:pointer; z-index:8;
+  display:none;
+}
+.cam-marker.visible { display:block; }
+.cam-dot {
+  width:10px; height:10px; border-radius:3px;
+  border:1.5px solid var(--ice);
+  background:var(--ice-dim);
+  margin:3px;
+  transition:all 0.2s;
+}
+.cam-dot.warn { border-color:var(--solar); background:var(--solar-dim); }
+.cam-marker:hover .cam-dot { transform:scale(1.4); background:var(--ice-dim); box-shadow:0 0 8px var(--ice-glow); }
+
+/* Map legend */
+#map-legend {
+  position:absolute; bottom:16px; left:16px; z-index:20;
+  background:rgba(3,15,28,0.92); backdrop-filter:blur(12px);
+  border:1px solid var(--rim); border-radius:10px;
+  padding:12px 16px;
+}
+.legend-title { font-family:var(--font-mono); font-size:8px; letter-spacing:2px; color:var(--text-dim); text-transform:uppercase; margin-bottom:9px; }
+.legend-row { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-mid); margin-bottom:5px; }
+.legend-row:last-child { margin-bottom:0; }
+.l-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.l-line { width:22px; height:0; flex-shrink:0; }
+
+/* Map coords overlay */
+#map-info {
+  position:absolute; bottom:16px; right:16px; z-index:20;
+  background:rgba(3,15,28,0.92); backdrop-filter:blur(12px);
+  border:1px solid var(--rim); border-radius:8px;
+  padding:8px 14px; font-family:var(--font-mono); font-size:9px;
+  color:var(--text-mid); letter-spacing:1px;
+  line-height:1.8;
+}
+
+/* Emergency banner */
+#emer-banner {
+  position:absolute; top:0; left:0; right:0; z-index:100;
+  padding:7px 20px;
+  background:linear-gradient(90deg, #cc0022, #ff2d55, #cc0022);
+  background-size:300% 100%;
+  animation:emer-scroll 2.5s linear infinite;
+  font-family:var(--font-display); font-size:12px; font-weight:700;
+  letter-spacing:3px; color:#fff; text-align:center;
+  display:none;
+}
+#emer-banner.show { display:block; }
+@keyframes emer-scroll { 0%{background-position:0 0} 100%{background-position:300% 0} }
+
+/* Satellite overlay */
+#sat-overlay {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse at 40% 40%, rgba(0,60,30,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 65% 65%, rgba(0,30,60,0.12) 0%, transparent 50%);
+  opacity:0; transition:opacity 0.6s;
+}
+#sat-overlay.show { opacity:1; }
+
+/* ════════════════════════════════
+   RIGHT PANEL
+════════════════════════════════ */
+#right-panel {
+  background:var(--deep);
+  border-left:1px solid var(--edge);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+
+.r-tabs {
+  display:flex; background:var(--base); border-bottom:1px solid var(--edge);
+  flex-shrink:0;
+}
+.r-tab {
+  flex:1; padding:10px 6px;
+  text-align:center;
+  font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text-dim); cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.2s; user-select:none;
+}
+.r-tab:hover { color:var(--text-mid); }
+.r-tab.active { color:var(--ice); border-bottom-color:var(--ice); }
+
+.r-tab-body { display:none; flex:1; overflow-y:auto; scrollbar-width:none; }
+.r-tab-body::-webkit-scrollbar { display:none; }
+.r-tab-body.active { display:block; }
+
+/* ALERTS */
+.alert-card {
+  margin:8px 10px 0;
+  background:var(--raised);
+  border:1px solid var(--edge);
+  border-radius:8px; padding:10px 11px;
+  border-left:3px solid var(--alert-c, var(--text-ghost));
+  cursor:pointer; transition:all 0.18s;
+  animation:slide-from-right 0.35s ease;
+}
+.alert-card:hover { background:var(--lift); transform:translateX(-2px); }
+.alert-card.crit { --alert-c:var(--crimson); background:rgba(255,45,85,0.04); }
+.alert-card.warn { --alert-c:var(--solar); }
+.alert-card.info { --alert-c:var(--ice); }
+.alert-card.safe { --alert-c:var(--jade); }
+@keyframes slide-from-right { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+.a-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; }
+.a-type { font-family:var(--font-mono); font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--alert-c, var(--text-dim)); }
+.a-time { font-family:var(--font-mono); font-size:8px; color:var(--text-ghost); }
+.a-msg { font-size:11px; line-height:1.55; color:var(--text-bright); margin-bottom:4px; }
+.a-meta { font-size:9px; color:var(--text-mid); }
+
+/* BUSES */
+.bus-row {
+  display:flex; align-items:center; gap:9px;
+  padding:9px 10px;
+  border-bottom:1px solid var(--edge);
+  cursor:pointer; transition:background 0.15s;
+}
+.bus-row:hover { background:var(--raised); }
+.bus-id-tag {
+  font-family:var(--font-display); font-size:10px; font-weight:700;
+  color:var(--ice); background:var(--lift);
+  border:1px solid var(--rim); border-radius:5px;
+  padding:3px 6px; min-width:54px; text-align:center;
+}
+.bus-r-info { flex:1; }
+.bus-r-route { font-size:11px; font-weight:600; }
+.bus-r-pass { font-size:9px; color:var(--text-mid); }
+
+/* INTEL */
+.intel-card {
+  margin:8px 10px 0;
+  background:var(--raised);
+  border:1px solid var(--edge);
+  border-radius:8px; padding:10px 11px;
+  border-left:3px solid var(--intel-c, var(--text-ghost));
+}
+.intel-card.unverif { --intel-c:var(--solar); }
+.intel-card.verif { --intel-c:var(--ice); }
+.intel-card.closed { --intel-c:var(--jade); }
+.i-hdr { display:flex; justify-content:space-between; margin-bottom:5px; }
+.i-badge { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; color:var(--intel-c); }
+.i-time { font-family:var(--font-mono); font-size:8px; color:var(--text-ghost); }
+.i-msg { font-size:11px; line-height:1.55; color:var(--text-bright); margin-bottom:4px; }
+.i-src { font-size:9px; color:var(--text-mid); }
+
+.tip-stats { padding:12px 10px 0; }
+.ts-title { font-family:var(--font-mono); font-size:8px; letter-spacing:2px; color:var(--text-dim); text-transform:uppercase; margin-bottom:10px; }
+.ts-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.ts-label { font-size:10px; color:var(--text-mid); min-width:38px; }
+.ts-track { flex:1; height:5px; background:var(--edge); border-radius:3px; overflow:hidden; }
+.ts-fill { height:100%; border-radius:3px; transition:width 1.2s ease; }
+.ts-count { font-family:var(--font-display); font-size:13px; font-weight:700; min-width:24px; text-align:right; }
+
+/* ════════════════════════════════
+   BOTTOM STRIP
+════════════════════════════════ */
+#bottom-strip {
+  grid-column:1/-1;
+  background:var(--deep);
+  border-top:1px solid var(--edge);
+  display:grid;
+  grid-template-columns:240px 1fr 1fr 1fr 280px;
+  height:148px;
+}
+
+.bot-cell {
+  border-right:1px solid var(--edge);
+  padding:10px 14px;
+  display:flex; flex-direction:column; gap:6px;
+}
+.bot-cell:last-child { border-right:none; }
+.bot-title {
+  font-family:var(--font-mono); font-size:8px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim);
+  display:flex; align-items:center; gap:6px; flex-shrink:0;
+}
+
+/* mini sparkline */
+.spark { display:flex; align-items:flex-end; gap:3px; flex:1; }
+.spark-bar {
+  flex:1; border-radius:2px 2px 0 0; min-height:3px;
+  transition:height 0.4s ease;
+}
+.spark-lbl { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:7px; color:var(--text-ghost); }
+
+/* SOS active strip */
+.sos-strip {
+  display:flex; align-items:center; gap:9px;
+  background:rgba(255,45,85,0.07);
+  border:1px solid rgba(255,45,85,0.25);
+  border-radius:7px; padding:7px 10px;
+}
+.sos-tag {
+  font-family:var(--font-display); font-size:11px; font-weight:900;
+  background:var(--crimson); color:#fff;
+  padding:2px 7px; border-radius:4px;
+  letter-spacing:2px; flex-shrink:0;
+  animation:blink 0.7s infinite;
+}
+.sos-body { flex:1; }
+.sos-r { font-size:12px; font-weight:600; }
+.sos-d { font-size:10px; color:var(--text-mid); }
+.sos-btn {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:1px;
+  background:rgba(255,45,85,0.12);
+  border:1px solid rgba(255,45,85,0.35);
+  color:var(--crimson); border-radius:5px;
+  padding:5px 10px; cursor:pointer; transition:all 0.2s;
+  white-space:nowrap;
+}
+.sos-btn:hover { background:rgba(255,45,85,0.22); }
+
+.metric-pair { display:flex; gap:6px; }
+.metric-box {
+  flex:1; background:var(--raised);
+  border:1px solid var(--edge); border-radius:6px;
+  padding:6px 10px; text-align:center;
+}
+.m-val { font-family:var(--font-display); font-size:16px; font-weight:700; line-height:1; }
+.m-lbl { font-size:8px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+
+/* feed thumbnails */
+.feed-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px; flex:1; }
+.feed-cell {
+  border-radius:6px; overflow:hidden; position:relative;
+  border:1px solid var(--rim); cursor:pointer; transition:border-color 0.2s;
+  background:var(--base);
+}
+.feed-cell:hover { border-color:var(--ice); }
+.feed-cell.offline { border-color:rgba(255,45,85,0.3); }
+.feed-inner {
+  width:100%; height:100%; min-height:42px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; color:var(--text-ghost);
+  background:repeating-linear-gradient(135deg, var(--base) 0px, var(--raised) 8px, var(--base) 8px, var(--raised) 16px);
+}
+.feed-lbl {
+  position:absolute; bottom:2px; left:4px;
+  font-family:var(--font-mono); font-size:7px; letter-spacing:1px;
+  color:var(--jade); background:rgba(0,0,0,0.65); padding:1px 4px; border-radius:2px;
+}
+.feed-rec {
+  position:absolute; top:3px; right:4px;
+  width:5px; height:5px; border-radius:50%;
+  background:var(--crimson);
+  animation:pulse 1.2s infinite;
+}
+
+/* response units */
+.unit-row {
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; padding:3px 0;
+}
+.unit-led { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.unit-name { flex:1; }
+.unit-status { font-family:var(--font-mono); font-size:9px; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="header">
+  <div class="h-brand">
+    <div class="h-emblem">🛡️</div>
+    <div class="h-brand-text">
+      <div class="h-name">SafeRoute Nigeria</div>
+      <div class="h-tagline">National Travel Security Command Centre</div>
+    </div>
+  </div>
+
+  <div class="h-divider"></div>
+
+  <div class="h-live-pill">
+    <div class="pulse-dot"></div>
+    LIVE OPS
+  </div>
+
+  <div class="h-clock">
+    <div class="h-time" id="clk-time">00:00:00</div>
+    <div class="h-date" id="clk-date">—</div>
+  </div>
+
+  <div class="h-spacer"></div>
+
+  <div class="h-kpi">
+    <div class="kpi-box" style="--kpi-accent:var(--ice)">
+      <div class="kpi-val" id="kv-buses">147</div>
+      <div class="kpi-lbl">Buses</div>
+    </div>
+    <div class="kpi-box" style="--kpi-accent:var(--jade)">
+      <div class="kpi-val" id="kv-pass">4,892</div>
+      <div class="kpi-lbl">Passengers</div>
+    </div>
+    <div class="kpi-box" style="--kpi-accent:var(--crimson)">
+      <div class="kpi-val" id="kv-sos">2</div>
+      <div class="kpi-lbl">SOS Active</div>
+    </div>
+    <div class="kpi-box" style="--kpi-accent:var(--solar)">
+      <div class="kpi-val" id="kv-dev">5</div>
+      <div class="kpi-lbl">Deviations</div>
+    </div>
+    <div class="kpi-box" style="--kpi-accent:#9d60ff">
+      <div class="kpi-val" style="color:#9d60ff;text-shadow:0 0 12px rgba(157,96,255,0.5)">8</div>
+      <div class="kpi-lbl">Drones</div>
+    </div>
+    <div class="kpi-box" style="--kpi-accent:var(--ice)">
+      <div class="kpi-val">234</div>
+      <div class="kpi-lbl">Cameras</div>
+    </div>
+  </div>
+
+  <div class="h-divider"></div>
+
+  <div class="h-alerts-btn" title="Active Alerts">
+    🔔
+    <div class="alert-pip" id="alert-pip">3</div>
+  </div>
+
+  <div class="h-user">
+    <div class="h-avatar">AB</div>
+    <div>
+      <div class="h-user-name">Insp. Adeyemi B.</div>
+      <div class="h-user-role">Control Room Officer</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ MAIN APP ══════════════ -->
+<div id="app">
+
+  <!-- ══ LEFT PANEL ══ -->
+  <div id="left-panel">
+
+    <div class="panel-section">
+      <div class="section-hdr">Navigation</div>
+      <div class="nav-link active"><span class="nav-icon">🗺️</span>Live Map View</div>
+      <div class="nav-link"><span class="nav-icon">🚌</span>Fleet Manager<span class="nav-count ok">147</span></div>
+      <div class="nav-link"><span class="nav-icon">🆘</span>SOS Dashboard<span class="nav-count">2</span></div>
+      <div class="nav-link"><span class="nav-icon">📡</span>Drone Control</div>
+      <div class="nav-link"><span class="nav-icon">🛰️</span>Satellite Feed</div>
+      <div class="nav-link"><span class="nav-icon">📷</span>Camera Grid</div>
+      <div class="nav-link"><span class="nav-icon">💬</span>Intel Hub<span class="nav-count ok">17</span></div>
+      <div class="nav-link"><span class="nav-icon">📊</span>Analytics</div>
+      <div class="nav-link"><span class="nav-icon">⚙️</span>Settings</div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-hdr">Partner Fleets</div>
+      <div class="partner-row">
+        <div class="p-logo">GIGM</div>
+        <div class="p-info">
+          <div class="p-route">48 buses active</div>
+          <div class="p-count">1,940 passengers</div>
+        </div>
+        <div class="status-chip ok">OK</div>
+      </div>
+      <div class="partner-row">
+        <div class="p-logo">CROSS</div>
+        <div class="p-info">
+          <div class="p-route">36 buses active</div>
+          <div class="p-count">1,480 passengers</div>
+        </div>
+        <div class="status-chip sos">SOS</div>
+      </div>
+      <div class="partner-row">
+        <div class="p-logo">ABC</div>
+        <div class="p-info">
+          <div class="p-route">29 buses active</div>
+          <div class="p-count">987 passengers</div>
+        </div>
+        <div class="status-chip dev">DEV</div>
+      </div>
+      <div class="partner-row">
+        <div class="p-logo">GUO</div>
+        <div class="p-info">
+          <div class="p-route">34 buses active</div>
+          <div class="p-count">485 passengers</div>
+        </div>
+        <div class="status-chip ok">OK</div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-hdr">System Health</div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">GPS Tracker Network</div><div class="sys-val">147/147</div></div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">Geofence Engine</div><div class="sys-val">ACTIVE</div></div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">Passenger SOS App</div><div class="sys-val">LIVE</div></div>
+      <div class="sys-row"><div class="sys-led warn"></div><div class="sys-name">AI Camera Feed</div><div class="sys-val">234/246</div></div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">Drone Network</div><div class="sys-val">8 ONLINE</div></div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">Satellite Link</div><div class="sys-val">SYNCED</div></div>
+      <div class="sys-row"><div class="sys-led on"></div><div class="sys-name">Tipline (SMS/App)</div><div class="sys-val">OPEN</div></div>
+      <div class="sys-row"><div class="sys-led warn"></div><div class="sys-name">Police API</div><div class="sys-val">PARTIAL</div></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-hdr">Risk Corridors</div>
+      <div class="corridor-card high">
+        <div class="corridor-name high">⚠ Abuja – Kaduna</div>
+        <div class="corridor-meta">THREAT: HIGH &nbsp;·&nbsp; 18 buses &nbsp;·&nbsp; 1 SOS</div>
+      </div>
+      <div class="corridor-card med">
+        <div class="corridor-name med">⚡ Benin – Ore</div>
+        <div class="corridor-meta">THREAT: MED &nbsp;·&nbsp; 11 buses</div>
+      </div>
+      <div class="corridor-card med">
+        <div class="corridor-name med">⚡ Lagos – Ibadan</div>
+        <div class="corridor-meta">THREAT: MED &nbsp;·&nbsp; 24 buses</div>
+      </div>
+      <div class="corridor-card low">
+        <div class="corridor-name low">✓ PH – Warri</div>
+        <div class="corridor-meta">THREAT: LOW &nbsp;·&nbsp; 9 buses</div>
+      </div>
+      <div class="corridor-card low">
+        <div class="corridor-name low">✓ Enugu – Onitsha</div>
+        <div class="corridor-meta">THREAT: LOW &nbsp;·&nbsp; 7 buses</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ MAP AREA ══ -->
+  <div id="map-area">
+    <div id="emer-banner">🚨 &nbsp; EMERGENCY: SOS ACTIVE — BUS CRX-044 — ABUJA–KADUNA KM 67 — RESPONSE UNIT ALPHA-7 DISPATCHED &nbsp; 🚨</div>
+
+    <div id="map-toolbar">
+      <button class="tb-btn active" id="vb-map" onclick="setMapView('map',this)">Map</button>
+      <button class="tb-btn" id="vb-sat" onclick="setMapView('sat',this)">Satellite</button>
+      <button class="tb-btn" id="vb-drone" onclick="setMapView('drone',this)">Drone</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn active" id="lb-buses" onclick="toggleLayer('buses',this)">🚌 Buses</button>
+      <button class="tb-btn active" id="lb-threats" onclick="toggleLayer('threats',this)">⚠ Threats</button>
+      <button class="tb-btn active" id="lb-routes" onclick="toggleLayer('routes',this)">📍 Routes</button>
+      <button class="tb-btn" id="lb-cams" onclick="toggleLayer('cams',this)">📷 Cameras</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn danger" onclick="fireSOS()">🆘 Simulate SOS</button>
+      <div class="tb-coords" id="tb-coords">LAT: 9.0820° N &nbsp;|&nbsp; LNG: 8.6753° E</div>
+    </div>
+
+    <div id="map-viewport">
+      <!-- Nigeria SVG outline -->
+      <svg id="nigeria-svg" viewBox="0 0 900 780" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bgGrad" cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stop-color="#071a2e"/>
+            <stop offset="100%" stop-color="#020c18"/>
+          </radialGradient>
+          <filter id="mapGlow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="routeHigh" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(255,45,85,0)" />
+            <stop offset="50%" stop-color="rgba(255,45,85,0.6)" />
+            <stop offset="100%" stop-color="rgba(255,45,85,0)" />
+          </linearGradient>
+        </defs>
+        <rect width="900" height="780" fill="url(#bgGrad)"/>
+
+        <!-- Grid -->
+        <g stroke="rgba(0,180,255,0.035)" stroke-width="1">
+          <line x1="0" y1="195" x2="900" y2="195"/>
+          <line x1="0" y1="390" x2="900" y2="390"/>
+          <line x1="0" y1="585" x2="900" y2="585"/>
+          <line x1="225" y1="0" x2="225" y2="780"/>
+          <line x1="450" y1="0" x2="450" y2="780"/>
+          <line x1="675" y1="0" x2="675" y2="780"/>
+        </g>
+
+        <!-- Nigeria landmass - accurate simplified path -->
+        <path id="nigeria-path" d="
+          M 195 108
+          C 220 95, 270 88, 330 84
+          C 380 80, 435 78, 490 82
+          C 545 86, 590 96, 630 112
+          C 665 126, 692 146, 710 170
+          C 724 190, 728 214, 722 240
+          C 714 268, 698 290, 678 314
+          C 656 340, 632 362, 610 390
+          C 588 418, 568 448, 548 472
+          C 530 494, 512 514, 498 536
+          C 486 554, 477 572, 466 585
+          C 454 599, 438 608, 420 612
+          C 402 616, 383 612, 364 606
+          C 344 600, 326 592, 306 585
+          C 284 578, 260 572, 238 575
+          C 218 578, 200 590, 186 608
+          L 178 620
+          C 166 600, 156 575, 150 548
+          C 144 520, 140 490, 138 460
+          C 136 430, 136 398, 138 366
+          C 140 334, 146 302, 154 270
+          C 162 238, 172 208, 182 178
+          Z"
+          fill="rgba(0,100,70,0.18)"
+          stroke="#1e5040"
+          stroke-width="1.8"
+          opacity="0.9"
+        />
+
+        <!-- Internal state division suggestions -->
+        <path d="M 300 220 Q 450 230 600 215" fill="none" stroke="rgba(0,180,100,0.1)" stroke-width="1" stroke-dasharray="5,8"/>
+        <path d="M 200 320 Q 380 310 560 325 Q 640 330 700 320" fill="none" stroke="rgba(0,180,100,0.1)" stroke-width="1" stroke-dasharray="5,8"/>
+        <path d="M 180 420 Q 360 410 540 418 Q 610 422 670 415" fill="none" stroke="rgba(0,180,100,0.1)" stroke-width="1" stroke-dasharray="5,8"/>
+        <path d="M 360 200 Q 380 310 370 420" fill="none" stroke="rgba(0,180,100,0.08)" stroke-width="1" stroke-dasharray="5,8"/>
+        <path d="M 520 190 Q 530 290 525 410" fill="none" stroke="rgba(0,180,100,0.08)" stroke-width="1" stroke-dasharray="5,8"/>
+
+        <!-- CITY MARKERS -->
+        <g font-family="JetBrains Mono, monospace" fill="rgba(0,200,255,0.75)" filter="url(#mapGlow)">
+          <!-- Abuja -->
+          <circle cx="432" cy="270" r="5" fill="rgba(0,200,255,0.4)" stroke="var(--ice)" stroke-width="1.5"/>
+          <text x="442" y="268" font-size="10" letter-spacing="1">ABUJA</text>
+          <!-- Kaduna -->
+          <circle cx="432" cy="185" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="442" y="183" font-size="9" letter-spacing="1">KADUNA</text>
+          <!-- Lagos -->
+          <circle cx="215" cy="510" r="5" fill="rgba(0,200,255,0.4)" stroke="var(--ice)" stroke-width="1.5"/>
+          <text x="225" y="508" font-size="10" letter-spacing="1">LAGOS</text>
+          <!-- Ibadan -->
+          <circle cx="295" cy="435" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="305" y="433" font-size="9" letter-spacing="1">IBADAN</text>
+          <!-- Benin City -->
+          <circle cx="380" cy="490" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="390" y="488" font-size="9" letter-spacing="1">BENIN CITY</text>
+          <!-- Port Harcourt -->
+          <circle cx="548" cy="548" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="558" y="546" font-size="9" letter-spacing="1">PORT HARCOURT</text>
+          <!-- Kano -->
+          <circle cx="520" cy="142" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="530" y="140" font-size="9" letter-spacing="1">KANO</text>
+          <!-- Enugu -->
+          <circle cx="526" cy="410" r="4" fill="rgba(0,200,255,0.3)" stroke="var(--ice)" stroke-width="1"/>
+          <text x="536" y="408" font-size="9" letter-spacing="1">ENUGU</text>
+          <!-- Lokoja -->
+          <circle cx="370" cy="355" r="3" fill="rgba(0,200,255,0.25)" stroke="var(--ice)" stroke-width="0.8"/>
+          <text x="378" y="353" font-size="8" letter-spacing="1" opacity="0.7">LOKOJA</text>
+          <!-- Warri -->
+          <circle cx="442" cy="518" r="3" fill="rgba(0,200,255,0.25)" stroke="var(--ice)" stroke-width="0.8"/>
+          <text x="450" y="516" font-size="8" opacity="0.7">WARRI</text>
+          <!-- Sokoto -->
+          <circle cx="225" cy="148" r="3" fill="rgba(0,200,255,0.25)" stroke="var(--ice)" stroke-width="0.8"/>
+          <text x="233" y="146" font-size="8" opacity="0.7">SOKOTO</text>
+          <!-- Owerri -->
+          <circle cx="485" cy="490" r="3" fill="rgba(0,200,255,0.25)" stroke="var(--ice)" stroke-width="0.8"/>
+          <text x="493" y="488" font-size="8" opacity="0.7">OWERRI</text>
+        </g>
+      </svg>
+
+      <!-- ROUTES (SVG overlay) -->
+      <svg id="route-layer" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+        <!-- Abuja-Kaduna HIGH RISK (dashed red) -->
+        <line id="r-abuja-kd" x1="48%" y1="34.6%" x2="48%" y2="23.7%" stroke="rgba(255,45,85,0.55)" stroke-width="3" stroke-dasharray="9,5"/>
+        <!-- Lagos-Ibadan MED (dashed amber) -->
+        <line id="r-lagos-ib" x1="23.9%" y1="65.4%" x2="32.8%" y2="55.8%" stroke="rgba(255,204,0,0.45)" stroke-width="2.5" stroke-dasharray="7,5"/>
+        <!-- Benin-Ore MED -->
+        <line id="r-benin-ore" x1="32.8%" y1="55.8%" x2="42.2%" y2="62.8%" stroke="rgba(255,204,0,0.4)" stroke-width="2" stroke-dasharray="7,5"/>
+        <!-- PH-Warri SAFE (solid green) -->
+        <line id="r-ph-warri" x1="60.9%" y1="70.3%" x2="49.1%" y2="66.4%" stroke="rgba(0,229,160,0.35)" stroke-width="2"/>
+        <!-- Abuja-Lokoja -->
+        <line id="r-abuja-lok" x1="48%" y1="34.6%" x2="41.1%" y2="45.5%" stroke="rgba(0,200,255,0.3)" stroke-width="1.5"/>
+        <!-- Enugu-Onitsha -->
+        <line id="r-enugu" x1="58.4%" y1="52.6%" x2="48%" y2="62.8%" stroke="rgba(0,229,160,0.3)" stroke-width="1.5"/>
+      </svg>
+
+      <!-- THREAT ZONES -->
+      <div id="threat-layer">
+        <div class="tz high" style="width:130px;height:130px;left:48%;top:29%"></div>
+        <div class="tz med" style="width:100px;height:100px;left:32%;top:56%"></div>
+        <div class="tz med" style="width:90px;height:90px;left:42%;top:63%"></div>
+      </div>
+
+      <!-- BUS DOTS -->
+      <div id="bus-layer">
+        <!-- Abuja-Kaduna -->
+        <div class="bus-dot sos" style="left:47%;top:27%">
+          <div class="bus-tip"><div class="tip-id">CRX-044</div><div class="tip-row"><span class="tip-val">32 passengers</span><span>·</span><span class="tip-val" style="color:var(--crimson)">SOS ACTIVE</span></div><div class="tip-row"><span>Abuja–Kaduna KM 67</span></div></div>
+        </div>
+        <div class="bus-dot ok" style="left:48.5%;top:26%">
+          <div class="bus-tip"><div class="tip-id">GIGM-112</div><div class="tip-row"><span class="tip-val">47 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div><div class="tip-row"><span>Abuja–Kaduna</span></div></div>
+        </div>
+        <div class="bus-dot ok" style="left:48%;top:24%">
+          <div class="bus-tip"><div class="tip-id">GIGM-098</div><div class="tip-row"><span class="tip-val">44 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div></div>
+        </div>
+        <!-- Lagos-Ibadan -->
+        <div class="bus-dot dev" style="left:28%;top:59%">
+          <div class="bus-tip"><div class="tip-id">ABC-077</div><div class="tip-row"><span class="tip-val">38 passengers</span><span>·</span><span class="tip-val" style="color:var(--solar)">Route Deviation</span></div><div class="tip-row"><span>Lagos–Ibadan</span></div></div>
+        </div>
+        <div class="bus-dot ok" style="left:25%;top:61%">
+          <div class="bus-tip"><div class="tip-id">GUO-031</div><div class="tip-row"><span class="tip-val">42 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div></div>
+        </div>
+        <!-- Benin area -->
+        <div class="bus-dot ok" style="left:43%;top:63%">
+          <div class="bus-tip"><div class="tip-id">GIGM-201</div><div class="tip-row"><span class="tip-val">39 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div><div class="tip-row"><span>Lagos–Benin</span></div></div>
+        </div>
+        <!-- Port Harcourt -->
+        <div class="bus-dot ok" style="left:59%;top:69%">
+          <div class="bus-tip"><div class="tip-id">ABC-055</div><div class="tip-row"><span class="tip-val">45 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div><div class="tip-row"><span>PH–Warri</span></div></div>
+        </div>
+        <div class="bus-dot ok" style="left:56%;top:67%">
+          <div class="bus-tip"><div class="tip-id">CROSS-019</div><div class="tip-row"><span class="tip-val">41 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div></div>
+        </div>
+        <!-- Abuja -->
+        <div class="bus-dot ok" style="left:47%;top:35%">
+          <div class="bus-tip"><div class="tip-id">GIGM-003</div><div class="tip-row"><span class="tip-val">50 passengers</span><span>·</span><span class="tip-val" style="color:var(--jade)">Normal</span></div><div class="tip-row"><span>Abuja Terminal</span></div></div>
+        </div>
+      </div>
+
+      <!-- CAMERA MARKERS -->
+      <div id="cam-layer">
+        <div class="cam-marker" style="left:48%;top:26%"><div class="cam-dot" title="CAM-A7 · ACTIVE"></div></div>
+        <div class="cam-marker" style="left:28%;top:60%"><div class="cam-dot" title="CAM-B12 · ACTIVE"></div></div>
+        <div class="cam-marker" style="left:43%;top:63%"><div class="cam-dot" title="CAM-C5 · ACTIVE"></div></div>
+        <div class="cam-marker" style="left:47%;top:33%"><div class="cam-dot warn" title="CAM-D3 · WARNING"></div></div>
+        <div class="cam-marker" style="left:59%;top:68%"><div class="cam-dot" title="CAM-E2 · ACTIVE"></div></div>
+      </div>
+
+      <!-- SATELLITE OVERLAY -->
+      <div id="sat-overlay"></div>
+
+      <!-- MAP LEGEND -->
+      <div id="map-legend">
+        <div class="legend-title">Legend</div>
+        <div class="legend-row"><div class="l-dot" style="background:var(--jade);box-shadow:0 0 6px var(--jade-glow)"></div>Safe Bus</div>
+        <div class="legend-row"><div class="l-dot" style="background:var(--solar);box-shadow:0 0 6px var(--solar-glow)"></div>Route Deviation</div>
+        <div class="legend-row"><div class="l-dot" style="background:var(--crimson);box-shadow:0 0 6px var(--crimson-glow)"></div>SOS Alert</div>
+        <div class="legend-row"><div class="l-line" style="border-top:2px dashed rgba(255,45,85,0.55)"></div>High Risk Route</div>
+        <div class="legend-row"><div class="l-line" style="border-top:2px dashed rgba(255,204,0,0.45)"></div>Med Risk Route</div>
+        <div class="legend-row"><div class="l-line" style="border-top:2px solid rgba(0,229,160,0.35)"></div>Safe Route</div>
+        <div class="legend-row"><div style="width:12px;height:12px;border-radius:50%;border:1.5px dashed rgba(255,45,85,0.5)"></div>Threat Zone</div>
+      </div>
+
+      <div id="map-info">
+        ZOOM: 1× &nbsp;|&nbsp; WGS-84 &nbsp;|&nbsp; 147 OBJECTS TRACKED<br>
+        SAT PASS NEXT: 16:15:00 &nbsp;|&nbsp; DRONES: 8 ACTIVE
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <div id="right-panel">
+    <div class="r-tabs">
+      <div class="r-tab active" onclick="switchRTab('alerts',this)">Alerts</div>
+      <div class="r-tab" onclick="switchRTab('buses',this)">Fleet</div>
+      <div class="r-tab" onclick="switchRTab('intel',this)">Intel</div>
+    </div>
+
+    <!-- ALERTS TAB -->
+    <div class="r-tab-body active" id="rt-alerts">
+      <div style="padding:8px 10px 4px;">
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Live Alert Feed</div>
+      </div>
+      <div id="alert-feed">
+        <div class="alert-card crit">
+          <div class="a-hdr"><span class="a-type">🆘 SOS Active</span><span class="a-time">14:37:22</span></div>
+          <div class="a-msg">Passenger SOS — CRX-044, Abuja–Kaduna KM 67. Bus halted 8 min. 32 pax onboard.</div>
+          <div class="a-meta">CrossCountry · Driver: Musa A. · 9.12°N, 7.43°E</div>
+        </div>
+        <div class="alert-card warn">
+          <div class="a-hdr"><span class="a-type">📍 Route Deviation</span><span class="a-time">14:31:05</span></div>
+          <div class="a-msg">Bus ABC-077 deviated 2.4 km off Lagos–Ibadan expressway near Sagamu junction.</div>
+          <div class="a-meta">ABC Transport · Driver notified · Escalated</div>
+        </div>
+        <div class="alert-card warn">
+          <div class="a-hdr"><span class="a-type">📷 AI Camera Flag</span><span class="a-time">14:28:44</span></div>
+          <div class="a-msg">AI flagged 6 motorcycles clustered stationary at Abuja–Kaduna KM 61 checkpoint.</div>
+          <div class="a-meta">CAM-A7 · Confidence: 82% · Drone DRN-03 dispatched</div>
+        </div>
+        <div class="alert-card info">
+          <div class="a-hdr"><span class="a-type">🛰️ Satellite Update</span><span class="a-time">14:20:10</span></div>
+          <div class="a-msg">Satellite pass completed over Kaduna–Kano corridor. No anomalies detected. Next: 16:15.</div>
+          <div class="a-meta">Planet Labs feed · Corridor 3/5</div>
+        </div>
+        <div class="alert-card info">
+          <div class="a-hdr"><span class="a-type">🚁 Drone Report</span><span class="a-time">14:15:33</span></div>
+          <div class="a-msg">Drone DRN-03 completed sweep of Benin–Ore corridor. Road clear. 3 buses tracked safely.</div>
+          <div class="a-meta">DRN-03 · Alt 80m · Thermal: clear</div>
+        </div>
+        <div class="alert-card safe">
+          <div class="a-hdr"><span class="a-type">✅ SOS Resolved</span><span class="a-time">13:58:11</span></div>
+          <div class="a-msg">GIGM-088 SOS resolved — tyre blowout, not security. 47 passengers safe.</div>
+          <div class="a-meta">Response time: 4m 22s</div>
+        </div>
+        <div class="alert-card info">
+          <div class="a-hdr"><span class="a-type">💬 Intel Tip</span><span class="a-time">13:44:02</span></div>
+          <div class="a-msg">Anonymous tip: Suspicious activity near Lokoja bridge. Local unit dispatched.</div>
+          <div class="a-meta">Community Tip #247 · Source: SMS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLEET TAB -->
+    <div class="r-tab-body" id="rt-buses">
+      <div style="padding:8px 10px 4px;">
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Active Fleet — 147 Buses</div>
+      </div>
+      <div class="bus-row"><div class="bus-id-tag">CRX-044</div><div class="bus-r-info"><div class="bus-r-route">Abuja → Kaduna</div><div class="bus-r-pass">32 pax · KM 67</div></div><div class="status-chip sos">SOS</div></div>
+      <div class="bus-row"><div class="bus-id-tag">ABC-077</div><div class="bus-r-info"><div class="bus-r-route">Lagos → Ibadan</div><div class="bus-r-pass">38 pax</div></div><div class="status-chip dev">DEV</div></div>
+      <div class="bus-row"><div class="bus-id-tag">GIGM-112</div><div class="bus-r-info"><div class="bus-r-route">Abuja → Kaduna</div><div class="bus-r-pass">47 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">GIGM-098</div><div class="bus-r-info"><div class="bus-r-route">Abuja → Kaduna</div><div class="bus-r-pass">44 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">GIGM-201</div><div class="bus-r-info"><div class="bus-r-route">Lagos → Benin</div><div class="bus-r-pass">39 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">GIGM-003</div><div class="bus-r-info"><div class="bus-r-route">Abuja Terminal</div><div class="bus-r-pass">50 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">GUO-031</div><div class="bus-r-info"><div class="bus-r-route">Lagos → Ibadan</div><div class="bus-r-pass">42 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">ABC-055</div><div class="bus-r-info"><div class="bus-r-route">PH → Warri</div><div class="bus-r-pass">45 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div class="bus-row"><div class="bus-id-tag">CROSS-019</div><div class="bus-r-info"><div class="bus-r-route">PH → Owerri</div><div class="bus-r-pass">41 pax</div></div><div class="status-chip ok">OK</div></div>
+      <div style="padding:10px;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-align:center;">+ 138 more buses on route · All tracked</div>
+    </div>
+
+    <!-- INTEL TAB -->
+    <div class="r-tab-body" id="rt-intel">
+      <div style="padding:8px 10px 4px;">
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Community Intelligence Feed</div>
+      </div>
+      <div class="intel-card unverif">
+        <div class="i-hdr"><span class="i-badge">TIP #249 · UNVERIFIED</span><span class="i-time">14:32</span></div>
+        <div class="i-msg">Armed men sighted near Abuja–Kaduna KM 60–65. Approx 8–10 individuals. Drone sent.</div>
+        <div class="i-src">📱 App · Lokoja area</div>
+      </div>
+      <div class="intel-card verif">
+        <div class="i-hdr"><span class="i-badge">TIP #248 · VERIFIED</span><span class="i-time">13:44</span></div>
+        <div class="i-msg">Lokoja bridge — black Toyota Hilux (no plates) parked 3+ hrs. Unit confirmed suspicious.</div>
+        <div class="i-src">📟 SMS · Police verified</div>
+      </div>
+      <div class="intel-card closed">
+        <div class="i-hdr"><span class="i-badge">TIP #247 · RESOLVED</span><span class="i-time">12:21</span></div>
+        <div class="i-msg">Ore–Benin clear. Regular patrol active. Buses moving freely. Route confirmed safe.</div>
+        <div class="i-src">🚌 Driver report</div>
+      </div>
+      <div class="tip-stats">
+        <div class="ts-title">Today's Tip Sources</div>
+        <div class="ts-bar-row">
+          <span class="ts-label">App</span>
+          <div class="ts-track"><div class="ts-fill" style="width:75%;background:linear-gradient(90deg,var(--ice),var(--jade))"></div></div>
+          <span class="ts-count" style="color:var(--ice)">9</span>
+        </div>
+        <div class="ts-bar-row">
+          <span class="ts-label">SMS</span>
+          <div class="ts-track"><div class="ts-fill" style="width:58%;background:linear-gradient(90deg,var(--solar),#ff6b00)"></div></div>
+          <span class="ts-count" style="color:var(--solar)">7</span>
+        </div>
+        <div class="ts-bar-row">
+          <span class="ts-label">Driver</span>
+          <div class="ts-track"><div class="ts-fill" style="width:8%;background:var(--jade)"></div></div>
+          <span class="ts-count" style="color:var(--jade)">1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BOTTOM STRIP ══ -->
+  <div id="bottom-strip">
+
+    <!-- Weekly incidents chart -->
+    <div class="bot-cell">
+      <div class="bot-title">📊 Incidents This Week</div>
+      <div class="spark">
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--crimson),rgba(255,45,85,0.2));height:38%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--solar),rgba(255,204,0,0.2));height:55%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--crimson),rgba(255,45,85,0.2));height:80%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--solar),rgba(255,204,0,0.2));height:48%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--crimson),rgba(255,45,85,0.2));height:90%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--solar),rgba(255,204,0,0.2));height:62%"></div>
+        <div class="spark-bar" style="background:linear-gradient(to top,var(--crimson),rgba(255,45,85,0.2));height:72%"></div>
+      </div>
+      <div class="spark-lbl"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+    </div>
+
+    <!-- Active SOS -->
+    <div class="bot-cell">
+      <div class="bot-title">🆘 Active SOS</div>
+      <div class="sos-strip">
+        <div class="sos-tag">SOS</div>
+        <div class="sos-body">
+          <div class="sos-r">CRX-044 · Abuja–Kaduna</div>
+          <div class="sos-d">32 pax · KM 67 · <span id="sos-elapsed">08:12</span> elapsed</div>
+        </div>
+        <button class="sos-btn">RESPOND</button>
+      </div>
+      <div class="metric-pair">
+        <div class="metric-box">
+          <div class="m-val" style="color:var(--solar)">4:22</div>
+          <div class="m-lbl">Avg Response</div>
+        </div>
+        <div class="metric-box">
+          <div class="m-val" style="color:var(--jade)">94%</div>
+          <div class="m-lbl">Resolve Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Feeds -->
+    <div class="bot-cell">
+      <div class="bot-title">🛰️ Live Feeds</div>
+      <div class="feed-grid">
+        <div class="feed-cell"><div class="feed-inner">🛸</div><div class="feed-lbl">DRN-03</div><div class="feed-rec"></div></div>
+        <div class="feed-cell"><div class="feed-inner">🛰️</div><div class="feed-lbl">SAT-01</div><div class="feed-rec"></div></div>
+        <div class="feed-cell"><div class="feed-inner">📷</div><div class="feed-lbl">CAM-A7</div><div class="feed-rec"></div></div>
+        <div class="feed-cell offline"><div class="feed-inner" style="color:rgba(255,45,85,0.5)">⚠️</div><div class="feed-lbl" style="color:var(--crimson)">CAM-D3</div></div>
+      </div>
+    </div>
+
+    <!-- Response Units -->
+    <div class="bot-cell">
+      <div class="bot-title">🚔 Response Units</div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--crimson);box-shadow:0 0 7px var(--crimson-glow);animation:blink 0.7s infinite"></div>
+        <div class="unit-name">Alpha-7 (Kaduna)</div>
+        <div class="unit-status" style="color:var(--crimson)">DEPLOYED</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--solar);box-shadow:0 0 7px var(--solar-glow)"></div>
+        <div class="unit-name">Air Support-1</div>
+        <div class="unit-status" style="color:var(--solar)">ENROUTE</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--jade);box-shadow:0 0 7px var(--jade-glow)"></div>
+        <div class="unit-name">Bravo-2 (Lagos)</div>
+        <div class="unit-status" style="color:var(--jade)">STANDBY</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--jade);box-shadow:0 0 7px var(--jade-glow)"></div>
+        <div class="unit-name">Delta-1 (Abuja)</div>
+        <div class="unit-status" style="color:var(--jade)">STANDBY</div>
+      </div>
+    </div>
+
+    <!-- Drone Status -->
+    <div class="bot-cell">
+      <div class="bot-title">🚁 Drone Status</div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:#9d60ff;box-shadow:0 0 7px rgba(157,96,255,0.4)"></div>
+        <div class="unit-name">DRN-01 · Kano–Kaduna</div>
+        <div class="unit-status" style="color:#9d60ff">SWEEP</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--crimson);box-shadow:0 0 7px var(--crimson-glow);animation:blink 0.7s infinite"></div>
+        <div class="unit-name">DRN-03 · Abuja–Kd</div>
+        <div class="unit-status" style="color:var(--crimson)">ALERT</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:#9d60ff;box-shadow:0 0 7px rgba(157,96,255,0.4)"></div>
+        <div class="unit-name">DRN-05 · Benin–Ore</div>
+        <div class="unit-status" style="color:#9d60ff">PATROL</div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-led" style="background:var(--jade);box-shadow:0 0 7px var(--jade-glow)"></div>
+        <div class="unit-name">DRN-07 · Lagos</div>
+        <div class="unit-status" style="color:var(--jade)">RTB</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══ CLOCK ══
+function tick() {
+  const n = new Date();
+  document.getElementById('clk-time').textContent = n.toLocaleTimeString('en-GB');
+  document.getElementById('clk-date').textContent = n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+}
+setInterval(tick,1000); tick();
+
+// ══ SOS ELAPSED TIMER ══
+let sosStart = Date.now() - 492000;
+function updateElapsed() {
+  const e = Math.floor((Date.now() - sosStart)/1000);
+  const m = Math.floor(e/60).toString().padStart(2,'0');
+  const s = (e%60).toString().padStart(2,'0');
+  const el = document.getElementById('sos-elapsed');
+  if(el) el.textContent = m+':'+s;
+}
+setInterval(updateElapsed,1000);
+
+// ══ RIGHT PANEL TABS ══
+function switchRTab(tab, btn) {
+  document.querySelectorAll('.r-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.r-tab-body').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rt-'+tab).classList.add('active');
+}
+
+// ══ MAP VIEWS ══
+function setMapView(view, btn) {
+  document.querySelectorAll('[id^=vb-]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const so = document.getElementById('sat-overlay');
+  so.classList.toggle('show', view==='sat');
+}
+
+// ══ LAYER TOGGLES ══
+const layerMap = { buses:'bus-layer', threats:'threat-layer', routes:'route-layer', cams:'cam-layer' };
+function toggleLayer(key, btn) {
+  btn.classList.toggle('active');
+  const el = document.getElementById(layerMap[key]);
+  if(!el) return;
+  const on = btn.classList.contains('active');
+  if(key==='cams') {
+    el.querySelectorAll('.cam-marker').forEach(m=>{
+      if(on) m.classList.add('visible'); else m.classList.remove('visible');
+    });
+  } else {
+    el.style.opacity = on ? '1' : '0';
+    el.style.transition = 'opacity 0.4s';
+  }
+}
+
+// ══ COORDINATES ══
+document.getElementById('map-viewport').addEventListener('mousemove', function(e) {
+  const r = this.getBoundingClientRect();
+  const xp = (e.clientX - r.left)/r.width;
+  const yp = (e.clientY - r.top)/r.height;
+  const lat = (13.8 - yp*10).toFixed(4);
+  const lng = (3.2 + xp*11).toFixed(4);
+  document.getElementById('tb-coords').textContent = `LAT: ${lat}° N  |  LNG: ${lng}° E`;
+});
+
+// ══ LIVE BUS MOVEMENT ══
+function jiggleBuses() {
+  document.querySelectorAll('.bus-dot.ok').forEach(b=>{
+    const cl = parseFloat(b.style.left);
+    const ct = parseFloat(b.style.top);
+    b.style.left = Math.max(5,Math.min(95,cl+(Math.random()-0.5)*0.4))+'%';
+    b.style.top  = Math.max(5,Math.min(90,ct+(Math.random()-0.5)*0.35))+'%';
+    b.style.transition = 'left 2.5s ease, top 2.5s ease';
+  });
+}
+setInterval(jiggleBuses, 2800);
+
+// ══ SIMULATE SOS ══
+let sosFired = false;
+function fireSOS() {
+  if(sosFired) return;
+  sosFired = true;
+
+  // Banner
+  const banner = document.getElementById('emer-banner');
+  banner.textContent = '🚨  NEW SOS — GIGM-055 — LAGOS–IBADAN KM 43 — 44 PASSENGERS — DISPATCHING BRAVO-2  🚨';
+  banner.classList.add('show');
+
+  // Update counters
+  document.getElementById('kv-sos').textContent = '3';
+  document.getElementById('alert-pip').textContent = '4';
+
+  // New alert card at top
+  const feed = document.getElementById('alert-feed');
+  const card = document.createElement('div');
+  card.className = 'alert-card crit';
+  const t = new Date().toLocaleTimeString('en-GB');
+  card.innerHTML = `
+    <div class="a-hdr"><span class="a-type">🆘 NEW SOS ACTIVE</span><span class="a-time">${t}</span></div>
+    <div class="a-msg">GIGM-055 triggered passenger SOS — Lagos–Ibadan KM 43. Bus stopped. 44 pax onboard.</div>
+    <div class="a-meta">GIGM · Driver: Adebayo K. · 6.89°N, 3.71°E</div>
+  `;
+  feed.insertBefore(card, feed.firstChild);
+
+  // New bus dot (Lagos-Ibadan area)
+  const busLayer = document.getElementById('bus-layer');
+  const newBus = document.createElement('div');
+  newBus.className = 'bus-dot sos';
+  newBus.style.left = '27%'; newBus.style.top = '57%';
+  newBus.innerHTML = `<div class="bus-tip"><div class="tip-id">GIGM-055</div><div class="tip-row"><span class="tip-val">44 passengers</span><span>·</span><span class="tip-val" style="color:var(--crimson)">SOS ACTIVE</span></div></div>`;
+  busLayer.appendChild(newBus);
+
+  setTimeout(()=>{ banner.classList.remove('show'); sosFired=false; }, 10000);
+}
+
+// ══ COUNTER ANIMATION ══
+function animateNum(id, target, duration, fmt) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const start = 0, steps = duration/16;
+  let c = 0;
+  const iv = setInterval(()=>{
+    c += target/steps;
+    if(c >= target){ el.textContent = fmt ? target.toLocaleString() : target; clearInterval(iv); }
+    else el.textContent = fmt ? Math.floor(c).toLocaleString() : Math.floor(c);
+  },16);
+}
+setTimeout(()=>{
+  animateNum('kv-buses',147,1000);
+  animateNum('kv-pass',4892,1600,true);
+  animateNum('kv-sos',2,600);
+  animateNum('kv-dev',5,800);
+},200);
+
+// ══ SHOW EMERGENCY BANNER ON LOAD ══
+setTimeout(()=>{
+  document.getElementById('emer-banner').classList.add('show');
+  setTimeout(()=>document.getElementById('emer-banner').classList.remove('show'), 7000);
+},1500);
+</script>
+</body>
+</html>
